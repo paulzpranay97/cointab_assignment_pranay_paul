@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Page</title>
+</head>
+<body>
+  <div id="user-info"></div>
+  <div id="posts"></div>
+  <button id="bulk-add-btn">Bulk Add</button>
+  <button id="download-excel-btn" style="display: none;">Download in Excel</button>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+  const userId = 1; 
+  
+ 
+  fetch(`http://localhost:3000/api/${userId}`)
+    .then(response => response.json())
+    .then(data => {
+      const { user, posts } = data;
+      
+     
+      const userInfoElement = document.getElementById('user-info');
+      userInfoElement.innerHTML = `
+        <h2>User Information</h2>
+        <p>Name: ${user.name}</p>
+        <p>Title: ${user.tile}</p>
+        <p>Body: ${user.body}</p>
+        <p>Company: ${user.company}</p>`;
+      
+      
+      const postsElement = document.getElementById('posts');
+      postsElement.innerHTML = `
+        <h2>Posts</h2>
+        <ul>
+          ${posts.map(post => `<li><strong>${post.title}</strong>: ${post.body}</li>`).join('')}
+        </ul>
+      `;
+      
+    
+      const downloadExcelBtn = document.getElementById('download-excel-btn');
+      if (posts.length > 0) {
+        downloadExcelBtn.style.display = 'inline-block';
+      }
+
+     
+      const bulkAddBtn = document.getElementById('bulk-add-btn');
+      bulkAddBtn.addEventListener('click', () => {
+       
+        console.log('Bulk Add button clicked');
+      });
+
+      
+      downloadExcelBtn.addEventListener('click', () => {
+        
+        console.log('Download in Excel button clicked');
+      });
+    })
+    .catch(error => console.error('Error fetching data:', error));
+});
+  </script>
+</body>
+</html>
